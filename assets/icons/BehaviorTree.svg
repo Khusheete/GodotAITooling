@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="48"
+   height="48"
+   viewBox="0 0 12.7 12.7"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   sodipodi:docname="BehaviorTree.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="12.087093"
+     inkscape:cx="13.030428"
+     inkscape:cy="27.467315"
+     inkscape:window-width="1880"
+     inkscape:window-height="1052"
+     inkscape:window-x="40"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:connector-spacing="7" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <ellipse
+       style="fill:#ffff00;stroke:#ffff00;stroke-width:0.493409"
+       id="path15"
+       cx="6.3248191"
+       cy="2.1107459"
+       rx="0.75329548"
+       ry="0.75329524" />
+    <ellipse
+       style="fill:#ffff00;stroke:#ffff00;stroke-width:0.493409"
+       id="path15-7"
+       cx="3.0639117"
+       cy="9.9929619"
+       rx="0.75329548"
+       ry="0.75329524" />
+    <ellipse
+       style="fill:#ffff00;stroke:#ffff00;stroke-width:0.493409"
+       id="path15-6"
+       cx="9.6420326"
+       cy="10.082063"
+       rx="0.75329548"
+       ry="0.75329524" />
+    <rect
+       style="fill:#ffff00;stroke:#ffff00;stroke-width:0.278438"
+       id="rect19-5"
+       width="8.5979557"
+       height="0.58568537"
+       x="-7.158896"
+       y="6.3211446"
+       transform="matrix(0.37563842,-0.9267663,0.86903432,0.49475182,0,0)" />
+    <rect
+       style="fill:#ffff00;stroke:#ffff00;stroke-width:0.278438"
+       id="rect19-5-1"
+       width="8.5979557"
+       height="0.58568537"
+       x="-13.417153"
+       y="-5.5364027"
+       transform="matrix(-0.37563842,-0.9267663,-0.86903431,0.49475182,0,0)" />
+  </g>
+</svg>
