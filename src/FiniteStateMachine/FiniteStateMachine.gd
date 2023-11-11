@@ -11,9 +11,20 @@ signal state_changed(from: FSMState, to: FSMState)
 ## it becomes ready.
 @export var starting_state: NodePath: set = set_starting_state
 
+var _set_state_args: Dictionary = {}
 @onready var current_state: FSMState = get_node_or_null(starting_state):
 	set(value):
-		set_current_state(value, {})
+		var prev_state: FSMState = current_state
+		current_state = value
+		emit_signal("state_changed", prev_state, current_state)
+	
+		if is_inside_tree():
+			prev_state.__exit_state(current_state)
+			current_state.__enter_state(prev_state, _set_state_args)
+			_set_state_args = {}
+
+
+var enabled: bool = true: set = set_enabled, get = is_enabled
 
 
 func _ready() -> void:
@@ -44,13 +55,8 @@ func change_current_state(state_name: NodePath, args: Dictionary = {}) -> void:
 ## Sets the current state to `state`.
 ## `args` are the (optional) arguments to be passed to the new state `_on_enter`.
 func set_current_state(state: FSMState, args: Dictionary = {}) -> void:
-	var prev_state: FSMState = current_state
+	_set_state_args = args
 	current_state = state
-	emit_signal("state_changed", prev_state, current_state)
-	
-	if is_inside_tree():
-		prev_state.__exit_state(current_state)
-		current_state.__enter_state(prev_state, args)
 
 
 func get_current_state() -> FSMState:
