@@ -10,6 +10,9 @@ var _fsm: FiniteStateMachine
 ## state has a certain property, call the `current_state_has_property` on the
 ## parent FiniteStateMachine.
 ##
+## A child class can set custom properties by defining a Array[StringName] variable
+## named `_custom_state_properties`. Those will be added on_ready when running the game.
+##
 ## For example in a first person shooter, this could be used to tell the player
 ## controller weather you can use a weapon in the current state (with a property
 ## named &"can_fire_weapon"). This property would be in the "Walking" State
@@ -19,6 +22,14 @@ var _fsm: FiniteStateMachine
 
 func _ready() -> void:
 	_set_activated(false)
+	
+	if Engine.is_editor_hint():
+		return
+	
+	# Add custom state properties
+	var cstate_properties = get(&"_custom_state_properties")
+	if cstate_properties != null and cstate_properties is Array[StringName]:
+		state_properties.append_array(cstate_properties)
 
 
 func _enter_tree() -> void:
