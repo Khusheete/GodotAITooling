@@ -69,6 +69,23 @@ func set_starting_state(path: NodePath) -> void:
 		update_configuration_warnings()
 
 
+func set_enabled(value: bool) -> void:
+	enabled = value
+	current_state._set_activated(enabled)
+
+
+func is_enabled() -> bool:
+	return enabled
+
+
+func enable() -> void:
+	set_enabled(true)
+
+
+func disable() -> void:
+	set_enabled(false)
+
+
 func _get_configuration_warnings() -> PackedStringArray:
 	var warns := PackedStringArray([])
 	if starting_state.is_empty():
