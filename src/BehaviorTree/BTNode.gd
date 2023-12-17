@@ -4,21 +4,18 @@ extends Node
 
 
 const BTNode: Script = preload("res://addons/AIT/src/BehaviorTree/BTNode.gd")
-const BehaviorTree: Script = preload("res://addons/AIT/src/BehaviorTree/BehaviorTree.gd")
 
 var behavior_tree: BehaviorTree = null
 
 
 func _enter_tree() -> void:
 	_update_bt()
-	print("Hi ?")
 	update_configuration_warnings()
 
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PARENTED:
 		_update_bt()
-		print("Hi ?")
 		update_configuration_warnings()
 
 
@@ -28,7 +25,6 @@ func _update_bt() -> void:
 		behavior_tree = parent
 	elif parent is BTNode:
 		behavior_tree = parent.behavior_tree
-	behavior_tree = null
 
 
 enum InternalState {

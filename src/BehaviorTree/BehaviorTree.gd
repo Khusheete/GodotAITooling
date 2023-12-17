@@ -1,4 +1,5 @@
 @icon("res://addons/AIT/assets/icons/BehaviorTree.svg")
+class_name BehaviorTree
 extends Node
 
 
@@ -10,7 +11,12 @@ var running_node: BTAction
 
 
 func _process(_delta: float) -> void:
+	# Tell all the nodes that this is a new tick
+	for c: BTNode in get_children():
+		c.propagate_call(&"_internal_tick_init")
+	
 	# Tick the BT
+	running_node = null
 	var current_node: BTNode = get_child(0)
 	var next_child: int = 1
 	var child_node_state: int = 4 # None
