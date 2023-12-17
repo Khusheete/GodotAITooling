@@ -1,4 +1,6 @@
 @icon("res://addons/AIT/assets/icons/BTSelector.svg")
+## Executes child BTNodes until a success happend.
+class_name BTSelector
 extends "BTNode.gd"
 
 
@@ -6,7 +8,7 @@ var next_child: int
 
 
 func _internal_tick_init() -> void:
-	next_child = 0
+	next_child = -1
 
 
 func _internal_tick(child_state: InternalState) -> InternalState:
