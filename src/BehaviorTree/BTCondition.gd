@@ -1,4 +1,4 @@
-@icon("res://addons/AIT/assets/icons/BTCondition.svg")
+@icon("../../assets/icons/BTCondition.svg")
 ## A condition is a sequence that will be executed if and only if the condition is met.
 ## If it was not met, it will result in a failure.
 class_name BTCondition

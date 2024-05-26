@@ -1,10 +1,10 @@
-@icon("res://addons/AIT/assets/icons/BehaviorTree.svg")
+@icon("../../assets/icons/BehaviorTree.svg")
 class_name BehaviorTree
 extends Node
 
 
-const BTNode: Script = preload("res://addons/AIT/src/BehaviorTree/BTNode.gd")
-const BTAction: Script = preload("res://addons/AIT/src/BehaviorTree/BTAction.gd")
+const BTNode: Script = preload("BTNode.gd")
+const BTAction: Script = preload("BTAction.gd")
 
 
 var running_action: BTAction
