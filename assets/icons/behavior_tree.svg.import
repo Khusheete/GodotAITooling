@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwbtj7kbhqryi"
-path="res://.godot/imported/BTSelector.svg-f848ac710f9a994e4fa295a1a649d281.ctex"
+uid="uid://dawiay5clumvu"
+path="res://.godot/imported/behavior_tree.svg-c43bd4d2d754ccdd2dbfc1cc46e3a49b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/ait/assets/icons/BTSelector.svg"
-dest_files=["res://.godot/imported/BTSelector.svg-f848ac710f9a994e4fa295a1a649d281.ctex"]
+source_file="res://addons/AIT/assets/icons/behavior_tree.svg"
+dest_files=["res://.godot/imported/behavior_tree.svg-c43bd4d2d754ccdd2dbfc1cc46e3a49b.ctex"]
 
 [params]
 

@@ -1,8 +1,8 @@
-@icon("../../assets/icons/BTAction.svg")
+@icon("../../assets/icons/bt_action.svg")
 ## Tries to execute some action using the `_tick` function.
 ## `_tick` will be executed during the BehaviorTree's process thread.
 class_name BTAction
-extends "BTNode.gd"
+extends "bt_node.gd"
 
 
 enum TickState {

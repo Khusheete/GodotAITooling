@@ -2,20 +2,14 @@
 extends EditorPlugin
 
 
-const BehaviorTreeIcon: Texture = preload("assets/icons/BehaviorTree.svg")
-const BTSequenceIcon: Texture = preload("assets/icons/BTSequence.svg")
-const BTSelectorIcon: Texture = preload("assets/icons/BTSelector.svg")
-const BTConditionIcon: Texture = preload("assets/icons/BTCondition.svg")
-const BTActionIcon: Texture = preload("assets/icons/BTAction.svg")
-const BTNodeIcon: Texture = preload("assets/icons/BTNode.svg")
+const BEHAVIOR_TREE_ICON: Texture = preload("assets/icons/behavior_tree.svg")
+const BT_SEQUENCE_ICON: Texture = preload("assets/icons/bt_sequence.svg")
+const BT_SELECTOR_ICON: Texture = preload("assets/icons/bt_selector.svg")
+const BT_CONDITION_ICON: Texture = preload("assets/icons/bt_condition.svg")
+const BT_ACTION_ICON: Texture = preload("assets/icons/bt_action.svg")
+const BT_NODE_ICON: Texture = preload("assets/icons/bt_node.svg")
 
-const BehaviorTree: Script = preload("src/BehaviorTree/BehaviorTree.gd")
-const BTNode: Script = preload("src/BehaviorTree/BTNode.gd")
-const BTSequence: Script = preload("src/BehaviorTree/BTSequence.gd")
-const BTAction: Script = preload("src/BehaviorTree/BTAction.gd")
-const BTSelector: Script = preload("src/BehaviorTree/BTSelector.gd")
-const BTCondition: Script = preload("src/BehaviorTree/BTCondition.gd")
-
+const FINITE_STATE_MACHINE_ICON: Texture = preload("assets/icons/finite_state_machine.svg")
 
 func _enter_tree() -> void:
 	# Finite State Machine types
@@ -23,7 +17,7 @@ func _enter_tree() -> void:
 		"FiniteStateMachine",
 		"Node",
 		FiniteStateMachine,
-		null
+		FINITE_STATE_MACHINE_ICON
 	)
 	add_custom_type(
 		"FSMState",
@@ -37,37 +31,37 @@ func _enter_tree() -> void:
 		"BehaviorTree",
 		"Node",
 		BehaviorTree,
-		BehaviorTreeIcon
+		BEHAVIOR_TREE_ICON
 	)
 	add_custom_type(
 		"BTNode",
 		"Node",
 		BTNode,
-		BTNodeIcon
+		BT_NODE_ICON
 	)
 	add_custom_type(
 		"BTSequence",
 		"Node",
 		BTSequence,
-		BTSequenceIcon
+		BT_SEQUENCE_ICON
 	)
 	add_custom_type(
 		"BTCondition",
 		"Node",
 		BTCondition,
-		BTConditionIcon
+		BT_CONDITION_ICON
 	)
 	add_custom_type(
 		"BTSelector",
 		"Node",
 		BTSelector,
-		BTSelectorIcon
+		BT_SELECTOR_ICON
 	)
 	add_custom_type(
 		"BTAction",
 		"Node",
 		BTAction,
-		BTActionIcon
+		BT_ACTION_ICON
 	)
 
 

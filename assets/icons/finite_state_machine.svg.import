@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dawiay5clumvu"
-path="res://.godot/imported/BehaviorTree.svg-ad62c5504cdfdfbb41f04de7b11e7fb5.ctex"
+uid="uid://bxpq03t7wsq1y"
+path="res://.godot/imported/finite_state_machine.svg-582ebb86273b68b8bdc849905940a800.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/ait/assets/icons/BehaviorTree.svg"
-dest_files=["res://.godot/imported/BehaviorTree.svg-ad62c5504cdfdfbb41f04de7b11e7fb5.ctex"]
+source_file="res://addons/AIT/assets/icons/finite_state_machine.svg"
+dest_files=["res://.godot/imported/finite_state_machine.svg-582ebb86273b68b8bdc849905940a800.ctex"]
 
 [params]
 

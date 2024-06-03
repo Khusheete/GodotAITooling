@@ -1,5 +1,5 @@
 @tool
-@icon("../../assets/icons/BTNode.svg")
+@icon("../../assets/icons/bt_node.svg")
 class_name BTNode
 extends Node
 

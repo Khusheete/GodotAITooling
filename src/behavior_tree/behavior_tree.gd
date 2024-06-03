@@ -1,10 +1,6 @@
-@icon("../../assets/icons/BehaviorTree.svg")
+@icon("../../assets/icons/behavior_tree.svg")
 class_name BehaviorTree
 extends Node
-
-
-const BTNode: Script = preload("BTNode.gd")
-const BTAction: Script = preload("BTAction.gd")
 
 
 var running_action: BTAction

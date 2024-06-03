@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cf1sj37eix8ux"
-path="res://.godot/imported/BTAction.svg-fb2303773f962a763b9c36cea6bed4d7.ctex"
+uid="uid://c61pesbkfijqr"
+path="res://.godot/imported/bt_node.svg-37c07fec726fd74d425693385277c210.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/ait/assets/icons/BTAction.svg"
-dest_files=["res://.godot/imported/BTAction.svg-fb2303773f962a763b9c36cea6bed4d7.ctex"]
+source_file="res://addons/AIT/assets/icons/bt_node.svg"
+dest_files=["res://.godot/imported/bt_node.svg-37c07fec726fd74d425693385277c210.ctex"]
 
 [params]
 

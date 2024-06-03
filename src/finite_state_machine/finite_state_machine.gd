@@ -1,4 +1,5 @@
 @tool
+@icon("../../assets/icons/finite_state_machine.svg")
 class_name FiniteStateMachine
 extends Node
 
