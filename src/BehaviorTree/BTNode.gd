@@ -1,9 +1,7 @@
 @tool
-@icon("res://addons/AIT/assets/icons/BTNode.svg")
+@icon("../../assets/icons/BTNode.svg")
+class_name BTNode
 extends Node
-
-
-const BTNode: Script = preload("res://addons/AIT/src/BehaviorTree/BTNode.gd")
 
 var behavior_tree: BehaviorTree = null
 

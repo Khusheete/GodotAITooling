@@ -1,13 +1,13 @@
-@icon("res://addons/AIT/assets/icons/BehaviorTree.svg")
+@icon("../../assets/icons/BehaviorTree.svg")
 class_name BehaviorTree
 extends Node
 
 
-const BTNode: Script = preload("res://addons/AIT/src/BehaviorTree/BTNode.gd")
-const BTAction: Script = preload("res://addons/AIT/src/BehaviorTree/BTAction.gd")
+const BTNode: Script = preload("BTNode.gd")
+const BTAction: Script = preload("BTAction.gd")
 
 
-var running_node: BTAction
+var running_action: BTAction
 
 
 func _process(_delta: float) -> void:
@@ -16,7 +16,7 @@ func _process(_delta: float) -> void:
 		c.propagate_call(&"_internal_tick_init")
 	
 	# Tick the BT
-	running_node = null
+	running_action = null
 	var current_node: BTNode = get_child(0)
 	var next_child: int = 1
 	var child_node_state: int = 4 # None
@@ -39,7 +39,7 @@ func _process(_delta: float) -> void:
 				else:
 					current_node = node_parent
 			2: # Running
-				running_node = current_node
+				running_action = current_node
 				break
 			3: # Continue
 				current_node = current_node._get_process_child()

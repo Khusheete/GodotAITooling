@@ -1,4 +1,4 @@
-@icon("res://addons/AIT/assets/icons/BTSelector.svg")
+@icon("../../assets/icons/BTSelector.svg")
 ## Executes child BTNodes until a success happend.
 class_name BTSelector
 extends "BTNode.gd"

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7baoi0f3hxk3"
-path="res://.godot/imported/BehaviorTree.svg-d8d2ff41f9e6422556e74bba88d5ac58.ctex"
+uid="uid://dawiay5clumvu"
+path="res://.godot/imported/BehaviorTree.svg-ad62c5504cdfdfbb41f04de7b11e7fb5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/AIT/assets/icons/BehaviorTree.svg"
-dest_files=["res://.godot/imported/BehaviorTree.svg-d8d2ff41f9e6422556e74bba88d5ac58.ctex"]
+source_file="res://addons/ait/assets/icons/BehaviorTree.svg"
+dest_files=["res://.godot/imported/BehaviorTree.svg-ad62c5504cdfdfbb41f04de7b11e7fb5.ctex"]
 
 [params]
 

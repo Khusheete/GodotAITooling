@@ -2,19 +2,19 @@
 extends EditorPlugin
 
 
-const BehaviorTreeIcon: Texture = preload("res://addons/AIT/assets/icons/BehaviorTree.svg")
-const BTSequenceIcon: Texture = preload("res://addons/AIT/assets/icons/BTSequence.svg")
-const BTSelectorIcon: Texture = preload("res://addons/AIT/assets/icons/BTSelector.svg")
-const BTConditionIcon: Texture = preload("res://addons/AIT/assets/icons/BTCondition.svg")
-const BTActionIcon: Texture = preload("res://addons/AIT/assets/icons/BTAction.svg")
-const BTNodeIcon: Texture = preload("res://addons/AIT/assets/icons/BTNode.svg")
+const BehaviorTreeIcon: Texture = preload("assets/icons/BehaviorTree.svg")
+const BTSequenceIcon: Texture = preload("assets/icons/BTSequence.svg")
+const BTSelectorIcon: Texture = preload("assets/icons/BTSelector.svg")
+const BTConditionIcon: Texture = preload("assets/icons/BTCondition.svg")
+const BTActionIcon: Texture = preload("assets/icons/BTAction.svg")
+const BTNodeIcon: Texture = preload("assets/icons/BTNode.svg")
 
-const BehaviorTree: Script = preload("res://addons/AIT/src/BehaviorTree/BehaviorTree.gd")
-const BTNode: Script = preload("res://addons/AIT/src/BehaviorTree/BTNode.gd")
-const BTSequence: Script = preload("res://addons/AIT/src/BehaviorTree/BTSequence.gd")
-const BTAction: Script = preload("res://addons/AIT/src/BehaviorTree/BTAction.gd")
-const BTSelector: Script = preload("res://addons/AIT/src/BehaviorTree/BTSelector.gd")
-const BTCondition: Script = preload("res://addons/AIT/src/BehaviorTree/BTCondition.gd")
+const BehaviorTree: Script = preload("src/BehaviorTree/BehaviorTree.gd")
+const BTNode: Script = preload("src/BehaviorTree/BTNode.gd")
+const BTSequence: Script = preload("src/BehaviorTree/BTSequence.gd")
+const BTAction: Script = preload("src/BehaviorTree/BTAction.gd")
+const BTSelector: Script = preload("src/BehaviorTree/BTSelector.gd")
+const BTCondition: Script = preload("src/BehaviorTree/BTCondition.gd")
 
 
 func _enter_tree() -> void:

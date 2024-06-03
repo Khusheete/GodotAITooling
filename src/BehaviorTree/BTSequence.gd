@@ -1,4 +1,4 @@
-@icon("res://addons/AIT/assets/icons/BTSequence.svg")
+@icon("../../assets/icons/BTSequence.svg")
 ## Executes all the childs nodes. Stop at the first running one.
 ## Fails at the first fail.
 class_name BTSequence
