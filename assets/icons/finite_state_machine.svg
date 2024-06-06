@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="48"
+   height="48.000088"
+   viewBox="0 0 12.7 12.700023"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   sodipodi:docname="finite_state_machine.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="15.27991"
+     inkscape:cx="23.46218"
+     inkscape:cy="24.018466"
+     inkscape:window-width="1880"
+     inkscape:window-height="1052"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#b3b3b3;stroke-width:0.0715808;stroke-linejoin:bevel;stroke-miterlimit:5.4"
+       id="rect1"
+       width="4.5957875"
+       height="3.363301"
+       x="4.0031838"
+       y="1.6428981" />
+    <rect
+       style="fill:#b3b3b3;stroke-width:0.0715808;stroke-linejoin:bevel;stroke-miterlimit:5.4"
+       id="rect1-5"
+       width="4.5957875"
+       height="3.363301"
+       x="0.81897968"
+       y="7.4424624" />
+    <rect
+       style="fill:#b3b3b3;stroke-width:0.0715808;stroke-linejoin:bevel;stroke-miterlimit:5.4"
+       id="rect1-2"
+       width="4.5957875"
+       height="3.363301"
+       x="7.18751"
+       y="7.4424624" />
+    <path
+       style="fill:none;stroke:#b3b3b3;stroke-width:0.793751;stroke-linejoin:bevel;stroke-miterlimit:5.4;stroke-dasharray:none"
+       d="m 6.3025092,3.2571512 -3.315553,5.946749 6.80055,-0.05813 z"
+       id="path1" />
+  </g>
+</svg>
