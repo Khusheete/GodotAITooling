@@ -6,6 +6,8 @@ const MIN_OBJECT_ID: int = -(1 << 31)
 var _next_object_id = MIN_OBJECT_ID
 var _heap := PackedInt32Array()
 var _heap_metadata: Dictionary = {}
+# FIXME: benchmark, maybe keeping/updating metadata is waaaay to slow for earase operations
+# (erasing a random element is probably rarer than inserting one)
 var _size: int = 0
 
 
