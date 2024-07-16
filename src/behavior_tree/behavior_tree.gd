@@ -33,6 +33,8 @@ func _process(_delta: float) -> void:
 	
 	# Tick the BT
 	running_action = null
+	if get_child_count() == 0:
+		return # Don't tick if there are no childs
 	var current_node: BTNode = get_child(0)
 	var next_child: int = 1
 	var child_node_state: int = 4 # None
