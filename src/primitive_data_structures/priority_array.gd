@@ -19,26 +19,10 @@ func insert(priority: int) -> int:
 		_array.append_array([obj_id, priority])
 		return obj_id
 	
-	var lower_bound: int = 0
-	var higher_bound: int = _size
-	var current_index: int
+	var index: int = _find_index_for_priority(priority)
 	
-	while lower_bound != higher_bound:
-		@warning_ignore("integer_division")
-		current_index = (lower_bound + higher_bound) / 2
-		
-		var current_priority: int = get_priority(current_index)
-		
-		if current_priority < priority:
-			lower_bound = current_index + 1
-			current_index = lower_bound
-		elif current_priority > priority:
-			higher_bound = current_index
-		else: # current_priority == priority
-			break
-	
-	_array.insert(2 * current_index, priority)
-	_array.insert(2 * current_index, obj_id)
+	_array.insert(2 * index, priority)
+	_array.insert(2 * index, obj_id)
 	_size += 1
 	
 	return obj_id
@@ -68,25 +52,52 @@ func find(identifier: int) -> int:
 	return -1
 
 
-func erase(identifier: int) -> void:
-	var index: int = find(identifier)
-	if index == -1:
-		return
+func remove_at(index: int) -> void:
+	if index >= _size or index < 0:
+		push_error("AITPriorityArray index out of range")
 	_array.remove_at(2 * index)
 	_array.remove_at(2 * index)
 	_size -= 1
 
 
+func erase(identifier: int) -> void:
+	var index: int = find(identifier)
+	if index == -1:
+		return
+	remove_at(index)
+
+
 func get_identifier(index: int) -> int:
-	if index >= _size:
+	if index >= _size or index < 0:
 		push_error("AITPriorityArray index out of range")
 	return _array[2 * index]
 
 
 func get_priority(index: int) -> int:
-	if index >= _size:
+	if index >= _size or index < 0:
 		push_error("AITPriorityArray index out of range")
 	return _array[2 * index + 1]
+
+
+func set_priority(index: int, new_priority: int) -> void:
+	if index >= _size or index < 0:
+		push_error("AITPriorityArray index out of range")
+	
+	var previous_priority: int = get_priority(index)
+	var obj_id: int = get_identifier(index)
+	var new_index: int = -1
+	
+	if previous_priority == new_priority:
+		return
+	elif previous_priority < new_priority:
+		new_index = _find_index_for_priority(new_priority, index + 1, _size) - 1
+	else:
+		new_index = _find_index_for_priority(new_priority, 0, index)
+	
+	remove_at(index)
+	_array.insert(2 * new_index, new_priority)
+	_array.insert(2 * new_index, obj_id)
+	_size += 1
 
 
 func size() -> int:
@@ -95,3 +106,25 @@ func size() -> int:
 
 func is_empty() -> bool:
 	return _size == 0
+
+
+func _find_index_for_priority(priority: int, lower_bound: int = 0, higher_bound: int = _size) -> int:
+	#var lower_bound: int = 0
+	#var higher_bound: int = _size
+	var current_index: int
+	
+	while lower_bound != higher_bound:
+		@warning_ignore("integer_division")
+		current_index = (lower_bound + higher_bound) / 2
+		
+		var current_priority: int = get_priority(current_index)
+		
+		if current_priority < priority:
+			lower_bound = current_index + 1
+			current_index = lower_bound
+		elif current_priority > priority:
+			higher_bound = current_index
+		else: # current_priority == priority
+			break
+	
+	return current_index
