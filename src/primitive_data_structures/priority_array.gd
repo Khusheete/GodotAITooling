@@ -100,6 +100,13 @@ func set_priority(index: int, new_priority: int) -> void:
 	_size += 1
 
 
+func set_priority_of(identifier: int, new_priority: int) -> void:
+	var index: int = find(identifier)
+	if index == -1:
+		return
+	set_priority(index, new_priority)
+
+
 func size() -> int:
 	return _size
 
