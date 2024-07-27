@@ -118,7 +118,7 @@ func is_empty() -> bool:
 func _find_index_for_priority(priority: int, lower_bound: int = 0, higher_bound: int = _size) -> int:
 	#var lower_bound: int = 0
 	#var higher_bound: int = _size
-	var current_index: int
+	var current_index: int = lower_bound
 	
 	while lower_bound != higher_bound:
 		@warning_ignore("integer_division")
