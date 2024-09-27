@@ -5,14 +5,20 @@ const MIN_OBJECT_ID: int = -(1 << 31)
 
 var _next_object_id = MIN_OBJECT_ID
 var _heap := PackedInt32Array()
-var _heap_metadata: Dictionary = {}
-# FIXME: benchmark, maybe keeping/updating metadata is waaaay to slow for earase operations
-# (erasing a random element is probably rarer than inserting one)
+var _ids_to_objects: Dictionary = {}
+var _objects_to_ids: Dictionary = {}
 var _size: int = 0
+var _min_queue: bool = false
+
+func _init(min_queue: bool = false) -> void:
+	_min_queue = min_queue
 
 
 ## Insert a new object inside the priority queue, and returns it's object identifier
-func insert(priority: int) -> int:
+func insert(object: Variant, priority: int) -> void:
+	if _min_queue: # Invert the priority for a min queue
+		priority = -priority
+	
 	# Insert object at the end of the heap
 	var obj_id: int = _next_object_id
 	_next_object_id += 1
@@ -24,57 +30,59 @@ func insert(priority: int) -> int:
 	_heap.push_back(priority)
 	
 	# Push object metadata to the heap
-	_heap_metadata[obj_id] = {
-		&"object_heap_index": obj_heap_index
-	}
+	_ids_to_objects[obj_id] = object
+	_objects_to_ids[object] = obj_id
 	
 	_heap_pull_up(obj_heap_index)
-	
-	return obj_id
 
 
 ## Returns the object identifier with the highest priority
-func peek() -> int:
-	return _heap_get_object_identifier(0)
+func peek() -> Variant:
+	return _ids_to_objects[_heap_get_object_identifier(0)]
 
 
 ## Removes the object with the highest priority and returns it's id
-func pop() -> int:
+func pop() -> Variant:
 	var head_id := _heap_get_object_identifier(0)
+	var object: Variant = _ids_to_objects[head_id]
 	
 	if _size == 1:
 		clear()
-		return head_id
+		return object
 	
 	# Swap with the remove last object
 	var last_index := _size - 1
 	_heap_swap_objects(0, last_index)
 	_heap.remove_at(_heap.size() - 1)
 	_heap.remove_at(_heap.size() - 1)
-	_heap_metadata.erase(head_id)
+	_ids_to_objects.erase(head_id)
+	_objects_to_ids.erase(object)
 	_size -= 1
 	
 	# Push root down until the heap property is verified
 	_heap_pull_down(0)
 	
-	return head_id
+	return object
 
 
-func erase(object_identifier: int) -> void:
-	if not _has_object(object_identifier):
-		push_error("There is no object with id %d in this priority queue")
+func erase(object: Variant) -> void:
+	if not contains(object):
+		push_error("There is no object %s in priority queue" % object)
 		return
+	
+	var object_id: int = _find_object_identifier(object)
 	
 	if _size == 1:
 		clear()
 		return
 	
-	var swapped_index := _get_heap_index(object_identifier)
+	var swapped_index := _get_heap_index(object_id)
 	var last_index := _size - 1
 	_heap_swap_objects(swapped_index, last_index)
 	_heap.remove_at(_heap.size() - 1)
 	_heap.remove_at(_heap.size() - 1)
-	_heap_metadata.erase(object_identifier)
+	_ids_to_objects.erase(object_id)
+	_objects_to_ids.erase(object)
 	_size -= 1
 	
 	if swapped_index == last_index:
@@ -89,12 +97,16 @@ func erase(object_identifier: int) -> void:
 		_heap_pull_down(swapped_index)
 
 
-func set_priority(object_identifier: int, new_priority: int) -> void:
-	if not _has_object(object_identifier):
-		push_error("There is no object with id %d in this priority queue")
+func set_priority(object: Variant, new_priority: int) -> void:
+	if not contains(object):
+		push_error("There is no object %s in priority queue" % object)
 		return
 	
-	var heap_index := _get_heap_index(object_identifier)
+	if _min_queue:
+		new_priority = -new_priority
+	
+	var object_id: int = _find_object_identifier(object)
+	var heap_index := _get_heap_index(object_id)
 	var prev_priority := _heap_get_object_priority(heap_index)
 	_heap_set_object_priority(heap_index, new_priority)
 	
@@ -106,7 +118,8 @@ func set_priority(object_identifier: int, new_priority: int) -> void:
 
 func clear() -> void:
 	_heap.clear()
-	_heap_metadata.clear()
+	_ids_to_objects.clear()
+	_objects_to_ids.clear()
 	_size = 0
 	_next_object_id = MIN_OBJECT_ID
 
@@ -115,12 +128,31 @@ func size() -> int:
 	return _size
 
 
+func is_empty() -> bool:
+	return _size == 0
+
+
+func is_min_queue() -> bool:
+	return _min_queue
+
+
+func contains(object: Variant) -> bool:
+	return object in _objects_to_ids
+
+
+func _find_object_identifier(object: Variant) -> int:
+	return _objects_to_ids[object]
+
+
 func _has_object(object_identifier: int) -> bool:
-	return object_identifier in _heap_metadata
+	return object_identifier in _ids_to_objects
 
 
 func _get_heap_index(object_identifier: int) -> int:
-	return _heap_metadata[object_identifier][&"object_heap_index"]
+	for i: int in _size:
+		if _heap_get_object_identifier(i) == object_identifier:
+			return i
+	return -1
 
 
 ## Does not update meta data
@@ -128,8 +160,6 @@ func _heap_swap_objects(heap_index_a: int, heap_index_b: int) -> void:
 	# Swap index metadata
 	var obj_a_id := _heap_get_object_identifier(heap_index_a)
 	var obj_b_id := _heap_get_object_identifier(heap_index_b)
-	_heap_metadata[obj_a_id][&"object_heap_index"] = heap_index_b
-	_heap_metadata[obj_b_id][&"object_heap_index"] = heap_index_a
 	
 	# Swap heap position
 	var tmp_obj_id: int = _heap_get_object_identifier(heap_index_a)
@@ -238,15 +268,15 @@ func _debug_check_heap_integrity() -> bool:
 		)
 		errored = true
 	
-	if _size != _heap_metadata.size():
+	if _size != _ids_to_objects.size():
 		printerr(
 			"Priority queue size and heap metadata size do not match: %d != %d"
-			% [_size, _heap_metadata.size()]
+			% [_size, _ids_to_objects.size()]
 		)
 		errored = true
 	
 	if not errored:
-		for object in range(1, _size):
+		for object: int in range(1, _size):
 			var parent_object   := _heap_get_parent_index(object)
 			var parent_priority := _heap_get_object_priority(parent_object)
 			var priority        := _heap_get_object_priority(object)
