@@ -2,9 +2,28 @@ class_name GOAPPlanner
 extends Node
 
 
+enum GoalState {
+	## This goal was not considered by the planner
+	NOT_CONSIDERED,
+	## This goal is invalid: it cannot be met
+	INVALID,
+	## This goal is already met
+	MET,
+	## This is the goal the planner currently wants to achieve
+	CURRENT,
+	## This is the current goal, but it is met. Actions that lead to this goal are yet to be
+	## finished and no other goal is of higher priority.
+	CURRENT_MET,
+	## This goal is valid but of a lower priority than the current goal
+	LOW_PRIORITY,
+}
+
 const INT_INF: int = (1 << 63) - 1
 
+## The world local to the agent
 @export var local_world: GOAPWorld
+## If this is true, debug information from the plan making process will be saved
+@export var keep_debug_information: bool = false
 
 var goals: Array[GOAPGoal] = []
 var actions: Array[GOAPAction] = []
@@ -12,6 +31,8 @@ var actions: Array[GOAPAction] = []
 var current_goal: GOAPGoal = null
 var plan: Array[GOAPAction] = []
 var current_action: int = -2
+
+var _debug_goal_state: Array[GoalState] = []
 
 
 func _ready() -> void:
@@ -27,6 +48,11 @@ func _ready() -> void:
 	
 	# Sort goals by priority
 	goals.sort_custom(func(a: GOAPGoal, b: GOAPGoal): return a.priority > b.priority)
+	
+	# Setup debug info
+	_debug_goal_state.resize(goals.size())
+	for i: int in _debug_goal_state.size():
+		_debug_goal_state[i] = GoalState.NOT_CONSIDERED
 
 
 func _process(_delta: float) -> void:
@@ -39,15 +65,38 @@ func _process(_delta: float) -> void:
 			current_action = -2
 			action.__end()
 	
-	# Get a goal and find a plan
+	# Tick the planner (FIXME: this should be handled outside the planner)
+	tick()
+
+
+func tick() -> void:
 	var current_state: Dictionary = get_current_world_state()
+	var current_goal_met: bool = false
 	
-	for goal: GOAPGoal in goals:
+	if keep_debug_information:
+		for i: int in _debug_goal_state.size():
+			_debug_goal_state[i] = GoalState.NOT_CONSIDERED
+	
+	for i: int in goals.size():
+		var goal: GOAPGoal = goals[i]
+		
 		if not goal.is_valid():
+			_debug_goal_state[i] = GoalState.INVALID
+			continue
+		if goal == current_goal:
+			if keep_debug_information:
+				if is_goal_met(current_goal):
+					_debug_goal_state[i] = GoalState.CURRENT_MET
+				else:
+					_debug_goal_state[i] = GoalState.CURRENT
 			continue
 		if is_goal_met(goal):
+			if keep_debug_information:
+				_debug_goal_state[i] = GoalState.MET
 			continue
-		if has_plan() and goal.priority <= current_goal.priority:
+		if has_plan() and goal.priority < current_goal.priority:
+			if keep_debug_information:
+				_debug_goal_state[i] = GoalState.LOW_PRIORITY
 			continue
 		
 		var new_plan = find_plan(goal, current_state)
@@ -62,7 +111,6 @@ func _process(_delta: float) -> void:
 
 
 func find_plan(goal: GOAPGoal, current_state: Dictionary) -> Array[GOAPAction]:
-	# TODO: debug
 	var discovered_nodes := AITPriorityQueue.new(true) # Create a min-queue
 	discovered_nodes.insert(current_state, 0)
 	
@@ -124,6 +172,33 @@ func next_action() -> void:
 		plan[current_action].__start()
 
 
+func get_current_action_index() -> int:
+	return current_action
+
+
+func get_planned_action(index: int) -> GOAPAction:
+	return plan[index]
+
+
+func get_plan_size() -> int:
+	return plan.size()
+
+
+func get_goal_state(index: int) -> GoalState:
+	if not keep_debug_information:
+		push_warning("Requesting debug information from GOAPPlanner with debug disabled")
+		return GoalState.INVALID
+	return _debug_goal_state[index]
+
+
+func get_goal(index: int) -> GOAPGoal:
+	return goals[index]
+
+
+func get_goal_count() -> int:
+	return goals.size()
+
+
 func get_current_action() -> GOAPAction:
 	if not has_plan():
 		return null
@@ -169,14 +244,20 @@ func get_world_state_value(world_state_name: StringName) -> GOAPWorldState:
 	return null
 
 
-func get_current_world_state() -> Dictionary:
-	var current_world_state: Dictionary = {}
-	
+func get_local_world_state() -> Dictionary:
 	if is_instance_valid(local_world):
-		current_world_state.merge(local_world.get_complete_state(), false)
-	
-	# Search in the global worlds
+		return local_world.get_complete_state()
+	return {}
+
+
+func get_global_world_state() -> Dictionary:
+	var current_world_state: Dictionary = {}
 	for global_world: GOAPWorld in get_tree().get_nodes_in_group(GOAPWorld.GLOBAL_WORLD_GROUP):
 		current_world_state.merge(global_world.get_complete_state())
-	
+	return current_world_state
+
+
+func get_current_world_state() -> Dictionary:
+	var current_world_state: Dictionary = get_local_world_state()
+	current_world_state.merge(get_global_world_state(), false)
 	return current_world_state
