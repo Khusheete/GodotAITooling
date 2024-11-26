@@ -14,8 +14,6 @@ enum GoalState {
 	## This is the current goal, but it is met. Actions that lead to this goal are yet to be
 	## finished and no other goal is of higher priority.
 	CURRENT_MET,
-	## This goal is valid but of a lower priority than the current goal
-	LOW_PRIORITY,
 }
 
 const INT_INF: int = (1 << 63) - 1
@@ -83,20 +81,16 @@ func tick() -> void:
 		if not goal.is_valid():
 			_debug_goal_state[i] = GoalState.INVALID
 			continue
-		if goal == current_goal:
+		if has_plan() and goal == current_goal:
 			if keep_debug_information:
 				if is_goal_met(current_goal):
 					_debug_goal_state[i] = GoalState.CURRENT_MET
 				else:
 					_debug_goal_state[i] = GoalState.CURRENT
-			continue
+			break # The next goals are lower priority
 		if is_goal_met(goal):
 			if keep_debug_information:
 				_debug_goal_state[i] = GoalState.MET
-			continue
-		if has_plan() and goal.priority < current_goal.priority:
-			if keep_debug_information:
-				_debug_goal_state[i] = GoalState.LOW_PRIORITY
 			continue
 		
 		var new_plan = find_plan(goal, current_state)
