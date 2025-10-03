@@ -57,10 +57,11 @@ enum TickMode {
 func _ready() -> void:
 	if process_bucket < -1:
 		process_bucket = AIT.get_next_bucket()
+	tick_mode = tick_mode
 
 
 func _process(_delta: float) -> void:
-	if AIT.can_agent_process(process_bucket):
+	if not AIT.can_agent_process(process_bucket):
 		return
 	
 	if tick_mode != TickMode.TICK_MODE_PROCESS_FRAME:
@@ -71,7 +72,7 @@ func _process(_delta: float) -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	if AIT.can_agent_process(process_bucket):
+	if not AIT.can_agent_process(process_bucket):
 		return
 	
 	if tick_mode != TickMode.TICK_MODE_PHYSICS_FRAME:
