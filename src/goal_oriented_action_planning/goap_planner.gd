@@ -19,7 +19,7 @@
 
 
 class_name GOAPPlanner
-extends Node
+extends Agent
 
 
 enum GoalState {
