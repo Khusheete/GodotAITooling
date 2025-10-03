@@ -32,6 +32,9 @@ const BT_NODE_ICON: Texture = preload("assets/icons/bt_node.svg")
 const FINITE_STATE_MACHINE_ICON: Texture = preload("assets/icons/finite_state_machine.svg")
 
 func _enter_tree() -> void:
+	# Autoload
+	add_autoload_singleton("AIT", "src/ait_autoload.gd")
+	
 	# Finite State Machine types
 	add_custom_type(
 		"FiniteStateMachine",
@@ -97,3 +100,6 @@ func _exit_tree() -> void:
 	remove_custom_type("BTCondition")
 	remove_custom_type("BTSelector")
 	remove_custom_type("BTAction")
+	
+	# Autoload
+	remove_autoload_singleton("AIT")

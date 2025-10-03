@@ -20,13 +20,17 @@
 
 @icon("../../assets/icons/behavior_tree.svg")
 class_name BehaviorTree
-extends Node
+extends Agent
 
 
 var running_action: BTAction
 
 
 func _process(_delta: float) -> void:
+	tick()
+
+
+func tick() -> void:
 	# Tell all the nodes that this is a new tick
 	for c: BTNode in get_children():
 		c.propagate_call(&"_internal_tick_init")
