@@ -19,35 +19,12 @@
 
 
 @abstract
-class_name GOAPAction
-extends Node
+class_name GOAPFixedAction
+extends GOAPAction
 
 
-var active: bool = false
-
-
-func _ready() -> void:
-	_set_activated(false)
-
-
-@abstract
-func _are_preconditions_met(states: Dictionary) -> bool
-
-
-@abstract
-func _apply_effects(states: Dictionary) -> void
-
-
-@abstract
-func _start() -> void
-
-
-@abstract
-func _end() -> void
-
-
-@abstract
-func can_execute() -> bool
+@export var preconditions: Dictionary = {}
+@export var effects: Dictionary = {}
 
 
 @abstract
@@ -58,24 +35,25 @@ func is_finished() -> bool
 func get_cost() -> int
 
 
-func __start() -> void:
-	_set_activated(true)
-	_start()
+@abstract
+func _start() -> void
 
 
-func __end() -> void:
-	_set_activated(false)
-	_end()
+@abstract
+func _end() -> void
 
 
-func _set_activated(value: bool) -> void:
-	active = value
-	set_process(value)
-	set_physics_process(value)
-	set_process_input(value)
-	set_process_unhandled_input(value)
-	set_process_unhandled_key_input(value)
+func can_execute() -> bool:
+	return true
 
 
-func is_active() -> bool:
-	return active
+func _are_preconditions_met(states: Dictionary) -> bool:
+	for precond: StringName in preconditions:
+		if preconditions[precond] != states[precond]:
+			return false
+	return true
+
+
+func _apply_effects(states: Dictionary) -> void:
+	for world_state: StringName in effects:
+		states[world_state] = effects[world_state]

@@ -54,6 +54,7 @@ var _debug_goal_state: Array[GoalState] = []
 
 
 func _ready() -> void:
+	super()
 	# Get goals and actions
 	var nodes_to_check: Array[Node] = get_children()
 	while not nodes_to_check.is_empty():
@@ -73,22 +74,21 @@ func _ready() -> void:
 		_debug_goal_state[i] = GoalState.NOT_CONSIDERED
 
 
-func _process(_delta: float) -> void:
+func tick() -> void:
+	var current_state: Dictionary = get_current_world_state()
+	
 	if has_plan():
 		var action: GOAPAction = get_current_action()
 		if action.is_finished():
-			next_action()
-		if not action.can_execute() or not is_action_valid(action):
+			_next_action(current_state)
+		elif not action.can_execute() or not is_action_valid(action, current_state):
 			# The action is not valid anymore, discard the plan
-			current_action = -2
-			action.__end()
+			invalidate_current_plan()
 	
-	# Tick the planner (FIXME: this should be handled outside the planner)
-	tick()
-
-
-func tick() -> void:
-	var current_state: Dictionary = get_current_world_state()
+	if has_plan():
+		return # We still have a plan stick to it
+	
+	# Otherwise find a new plan
 	var current_goal_met: bool = false
 	
 	if keep_debug_information:
@@ -103,17 +103,17 @@ func tick() -> void:
 			continue
 		if has_plan() and goal == current_goal:
 			if keep_debug_information:
-				if is_goal_met(current_goal):
+				if is_goal_met(current_goal, current_state):
 					_debug_goal_state[i] = GoalState.CURRENT_MET
 				else:
 					_debug_goal_state[i] = GoalState.CURRENT
 			break # The next goals are lower priority
-		if is_goal_met(goal):
+		if is_goal_met(goal, current_state):
 			if keep_debug_information:
 				_debug_goal_state[i] = GoalState.MET
 			continue
 		
-		var new_plan = find_plan(goal, current_state)
+		var new_plan: Array[GOAPAction] = find_plan(goal, current_state)
 		if not new_plan.is_empty():
 			if has_plan():
 				plan[current_action].__end()
@@ -177,13 +177,20 @@ func find_plan(goal: GOAPGoal, current_state: Dictionary) -> Array[GOAPAction]:
 	return path
 
 
-func next_action() -> void:
+func _next_action(current_state: Dictionary) -> void:
 	plan[current_action].__end()
 	current_action += 1
-	if current_action < 0 or current_action >= plan.size() or not is_action_valid(get_current_action()):
+	if current_action < 0 or current_action >= plan.size() or not plan[current_action]._are_preconditions_met(current_state):
 		current_action = -2 # We no longer have a plan
 	else:
 		plan[current_action].__start()
+
+
+func invalidate_current_plan() -> void:
+	if not has_plan():
+		return
+	current_action = -2
+	plan[current_action].__end()
 
 
 func get_current_action_index() -> int:
@@ -223,12 +230,12 @@ func has_plan() -> bool:
 	return current_action != -2
 
 
-func is_action_valid(action: GOAPAction) -> bool:
-	return action.can_execute() and are_world_states_verified(action.preconditions)
+func is_action_valid(action: GOAPAction, current_state: Dictionary) -> bool:
+	return action.can_execute() and action._are_preconditions_met(current_state)
 
 
-func is_goal_met(goal: GOAPGoal) -> bool:
-	return are_world_states_verified(goal.desired_world_states)
+func is_goal_met(goal: GOAPGoal, current_state: Dictionary) -> bool:
+	return goal.get_distance_to_state(current_state) == 0
 
 
 func are_world_states_verified(desired_world_states: Dictionary) -> bool:
