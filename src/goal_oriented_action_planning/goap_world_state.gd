@@ -18,10 +18,10 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
+@abstract
 class_name GOAPWorldState
 extends Node
 
 
-## Function to override
-func get_value() -> int:
-	return 1
+@abstract
+func get_value() -> int
