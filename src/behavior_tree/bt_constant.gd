@@ -18,23 +18,19 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-## Tries to execute some action using the `_tick` function.
-## `_tick` will be executed during the BehaviorTree's process thread.
-@icon("../../assets/icons/bt_action.svg")
-@abstract
-class_name BTAction
+## Always return some tick state (either SUCCESS or FAILURE).
+class_name BTConstant
 extends BTNode
+# TODO: create icon
 
 
 enum TickState {
 	SUCCESS,
 	FAILURE,
-	RUNNING
 }
 
 
-@abstract
-func _tick(p_delta: float) -> TickState
+@export var returned_tick_state := TickState.SUCCESS
 
 
 func _reset() -> void:
@@ -46,18 +42,13 @@ func _pretick() -> void:
 
 
 func _internal_tick(_p_child_state: InternalState) -> InternalState:
-	var tick_state: TickState = _tick(get_process_delta_time())
-	match tick_state:
+	match returned_tick_state:
 		TickState.SUCCESS:
 			return InternalState.SUCCESS
-		TickState.RUNNING:
-			return InternalState.RUNNING
-		TickState.FAILURE:
+		TickState.FAILURE, _:
 			return InternalState.FAILURE
-	push_error("This should be dead code.")
-	return InternalState.FAILURE
 
 
 func _get_process_child() -> BTNode:
-	push_error("Trying to access the child of a BTAction")
+	push_error("Trying to access the child of a BTConstant")
 	return self # DEAD CODE

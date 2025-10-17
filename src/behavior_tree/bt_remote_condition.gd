@@ -18,46 +18,25 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-## Tries to execute some action using the `_tick` function.
-## `_tick` will be executed during the BehaviorTree's process thread.
-@icon("../../assets/icons/bt_action.svg")
-@abstract
-class_name BTAction
-extends BTNode
+## A condition is a sequence that will be executed if and only if the condition is met.
+## If it was not met, it will result in a failure.
+@icon("../../assets/icons/bt_condition.svg")
+class_name BTRemoteCondition
+extends BTCondition
 
 
-enum TickState {
-	SUCCESS,
-	FAILURE,
-	RUNNING
-}
+@export var getter_node: Node
+@export var condition_func: StringName
 
 
-@abstract
-func _tick(p_delta: float) -> TickState
-
-
-func _reset() -> void:
-	pass
-
-
-func _pretick() -> void:
-	pass
-
-
-func _internal_tick(_p_child_state: InternalState) -> InternalState:
-	var tick_state: TickState = _tick(get_process_delta_time())
-	match tick_state:
-		TickState.SUCCESS:
-			return InternalState.SUCCESS
-		TickState.RUNNING:
-			return InternalState.RUNNING
-		TickState.FAILURE:
-			return InternalState.FAILURE
-	push_error("This should be dead code.")
-	return InternalState.FAILURE
-
-
-func _get_process_child() -> BTNode:
-	push_error("Trying to access the child of a BTAction")
-	return self # DEAD CODE
+func _condition_met() -> bool:
+	if not getter_node:
+		push_warning("No getter node provided.")
+		return false
+	if condition_func.is_empty():
+		push_warning("No getter function provided.")
+		return false
+	if not getter_node.has_method(condition_func):
+		push_warning("Getter node ", getter_node, " does not have method `", condition_func, "`")
+		return false
+	return getter_node.call(condition_func)

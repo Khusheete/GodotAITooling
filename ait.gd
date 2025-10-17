@@ -86,6 +86,18 @@ func _enter_tree() -> void:
 		BTAction,
 		BT_ACTION_ICON
 	)
+	add_custom_type(
+		"BTRemoteCondition",
+		"Node",
+		BTRemoteCondition,
+		BT_CONDITION_ICON
+	)
+	add_custom_type(
+		"BTConstant",
+		"Node",
+		BTConstant,
+		null
+	)
 
 
 func _exit_tree() -> void:
@@ -100,6 +112,8 @@ func _exit_tree() -> void:
 	remove_custom_type("BTCondition")
 	remove_custom_type("BTSelector")
 	remove_custom_type("BTAction")
+	remove_custom_type("BTRemoteCondition")
+	remove_custom_type("BTConstant")
 	
 	# Autoload
 	remove_autoload_singleton("AIT")

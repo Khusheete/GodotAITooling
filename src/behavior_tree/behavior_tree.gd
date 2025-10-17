@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Souchet Ferdinand (@Khusheete)
+# Copyright (c) 2025 Souchet Ferdinand (@Khusheete)
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -20,20 +20,20 @@
 
 @icon("../../assets/icons/behavior_tree.svg")
 class_name BehaviorTree
-extends Agent
+extends Node
 
 
 var running_action: BTAction
 
 
-func _process(_delta: float) -> void:
+func _process(_p_delta: float) -> void:
 	tick()
 
 
 func tick() -> void:
 	# Tell all the nodes that this is a new tick
 	for c: BTNode in get_children():
-		c.propagate_call(&"_internal_tick_init")
+		c.propagate_call(&"__pretick")
 	
 	# Tick the BT
 	running_action = null
@@ -44,7 +44,7 @@ func tick() -> void:
 	var child_node_state: int = 4 # None
 	
 	while true:
-		var current_node_state: int = current_node._internal_tick(child_node_state)
+		var current_node_state: int = current_node.__internal_tick(child_node_state)
 		
 		match current_node_state:
 			0, 1: # Failure, Success
@@ -53,9 +53,10 @@ func tick() -> void:
 				
 				# If the parent is this behavior tree, special treatment
 				if node_parent == self:
-					if next_child == get_child_count() or \
+					if next_child >= get_child_count() or \
 							current_node_state == 1: # Success
 						break
+					child_node_state = 4 # None
 					current_node = get_child(next_child)
 					next_child += 1
 				else:
@@ -64,6 +65,9 @@ func tick() -> void:
 				running_action = current_node
 				break
 			3: # Continue
+				child_node_state = 4 # None
+				if not current_node._get_process_child():
+					breakpoint
 				current_node = current_node._get_process_child()
 			_:
 				push_error("Error, unreachable state")

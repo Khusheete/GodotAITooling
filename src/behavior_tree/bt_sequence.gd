@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Souchet Ferdinand (@Khusheete)
+# Copyright (c) 2025 Souchet Ferdinand (@Khusheete)
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -18,29 +18,39 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-## Executes all the childs nodes. Stop at the first running one.
-## Fails at the first fail.
+## Executes all the childs nodes in sequence, ticking successfull nodes only once.
+## It is stopped at the first running one, and fails at the first fail.
 @icon("../../assets/icons/bt_sequence.svg")
 class_name BTSequence
-extends "bt_node.gd"
+extends BTNode
 
 
+@export var reactive: bool = false
 
 var next_child: int
 
 
-func _internal_tick_init() -> void:
-	next_child = -1
+func _reset() -> void:
+	reset_sequence()
 
 
-func _internal_tick(child_state: InternalState) -> InternalState:
-	# If the child succeded, stop there
-	if child_state == InternalState.FAILURE:
+func _pretick() -> void:
+	if reactive:
+		reset_sequence()
+
+
+func _internal_tick(p_child_state: InternalState) -> InternalState:
+	# If the child fails, stop there
+	if p_child_state == InternalState.FAILURE:
+		next_child = -1
 		return InternalState.FAILURE
 	
 	# Otherwise try to continue
-	next_child += 1
-	if next_child == get_child_count():
+	if p_child_state != InternalState.NONE:
+		next_child += 1
+	if next_child >= get_child_count():
+		if reactive:
+			propagate_call(&"_reset")
 		return InternalState.SUCCESS
 	else:
 		return InternalState.CONTINUE
@@ -48,3 +58,7 @@ func _internal_tick(child_state: InternalState) -> InternalState:
 
 func _get_process_child() -> BTNode:
 	return get_child(next_child)
+
+
+func reset_sequence() -> void:
+	next_child = 0

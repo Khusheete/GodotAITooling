@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Souchet Ferdinand (@Khusheete)
+# Copyright (c) 2025 Souchet Ferdinand (@Khusheete)
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -21,24 +21,29 @@
 ## Executes child BTNodes until a success happend.
 @icon("../../assets/icons/bt_selector.svg")
 class_name BTSelector
-extends "bt_node.gd"
+extends BTNode
 
 
 var next_child: int
 
 
-func _internal_tick_init() -> void:
-	next_child = -1
+func _reset() -> void:
+	pass
 
 
-func _internal_tick(child_state: InternalState) -> InternalState:
+func _pretick() -> void:
+	next_child = 0
+
+
+func _internal_tick(p_child_state: InternalState) -> InternalState:
 	# If the child succeded, stop there
-	if child_state == InternalState.SUCCESS:
+	if p_child_state == InternalState.SUCCESS:
 		return InternalState.SUCCESS
 	
 	# Otherwise try to continue
-	next_child += 1
-	if next_child == get_child_count():
+	if p_child_state != InternalState.NONE:
+		next_child += 1
+	if next_child >= get_child_count():
 		return InternalState.FAILURE
 	else:
 		return InternalState.CONTINUE

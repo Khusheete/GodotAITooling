@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Souchet Ferdinand (@Khusheete)
+# Copyright (c) 2025 Souchet Ferdinand (@Khusheete)
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -21,28 +21,33 @@
 ## A condition is a sequence that will be executed if and only if the condition is met.
 ## If it was not met, it will result in a failure.
 @icon("../../assets/icons/bt_condition.svg")
+@abstract
 class_name BTCondition
-extends "bt_sequence.gd"
+extends BTSequence
 
 
 var _condition_checked: bool
+var _condition_value: bool
 
 
-func _internal_tick_init() -> void:
-	super._internal_tick_init()
+## Returns the value of the condition of this node. Note that for optimisation reasons
+## the truth value of the condition is assumed not to change during a tick.
+@abstract
+func _condition_met() -> bool;
+
+
+func _pretick() -> void:
+	super._pretick()
 	_condition_checked = false
 
 
-func _internal_tick(child_state: InternalState) -> InternalState:
+func _internal_tick(p_child_state: InternalState) -> InternalState:
 	if not _condition_checked:
 		_condition_checked = true
-		if not _condition():
-			# If the condition is false, return failure, don't go back through this path
-			return InternalState.FAILURE
+		_condition_value = _condition_met()
 	
-	# If the condition has been checked, it must be true
-	return super._internal_tick(child_state)
-
-
-func _condition() -> bool:
-	return false
+	if _condition_value:
+		return super._internal_tick(p_child_state)
+	
+	reset_sequence()
+	return InternalState.FAILURE
