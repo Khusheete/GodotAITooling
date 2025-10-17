@@ -62,6 +62,7 @@ func _ready() -> void:
 		if node is GOAPGoal:
 			goals.push_back(node)
 		if node is GOAPAction:
+			node.planner = self # Set the node's planner to self
 			actions.push_back(node)
 		nodes_to_check.append_array(node.get_children())
 	

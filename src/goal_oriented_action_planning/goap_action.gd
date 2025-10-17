@@ -23,6 +23,7 @@ class_name GOAPAction
 extends Node
 
 
+var planner: GOAPPlanner
 var active: bool = false
 
 
