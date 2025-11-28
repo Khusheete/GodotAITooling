@@ -190,8 +190,8 @@ func _next_action(current_state: Dictionary) -> void:
 func invalidate_current_plan() -> void:
 	if not has_plan():
 		return
-	current_action = -2
 	plan[current_action].__end()
+	current_action = -2
 
 
 func get_current_action_index() -> int:
