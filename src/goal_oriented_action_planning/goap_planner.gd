@@ -22,6 +22,11 @@ class_name GOAPPlanner
 extends Agent
 
 
+signal plan_found()
+signal plan_invalidated()
+signal plan_finished()
+
+
 enum GoalState {
 	## This goal was not considered by the planner
 	NOT_CONSIDERED,
@@ -122,6 +127,7 @@ func tick() -> void:
 			current_goal = goal
 			current_action = 0
 			plan[current_action].__start()
+			plan_found.emit()
 			break
 
 
@@ -181,8 +187,11 @@ func find_plan(goal: GOAPGoal, current_state: Dictionary) -> Array[GOAPAction]:
 func _next_action(current_state: Dictionary) -> void:
 	plan[current_action].__end()
 	current_action += 1
-	if current_action < 0 or current_action >= plan.size() or not plan[current_action]._are_preconditions_met(current_state):
+	if current_action < 0 or current_action >= plan.size():
+		plan_finished.emit()
 		current_action = -2 # We no longer have a plan
+	elif not plan[current_action]._are_preconditions_met(current_state):
+		invalidate_current_plan()
 	else:
 		plan[current_action].__start()
 
