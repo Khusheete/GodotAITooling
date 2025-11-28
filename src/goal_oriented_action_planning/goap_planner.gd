@@ -32,6 +32,8 @@ enum GoalState {
 	NOT_CONSIDERED,
 	## This goal is invalid: it cannot be met
 	INVALID,
+	## Cannot find a plan to execute on it
+	CANNOT_FIND_PLAN,
 	## This goal is already met
 	MET,
 	## This is the goal the planner currently wants to achieve
@@ -105,30 +107,27 @@ func tick() -> void:
 		var goal: GOAPGoal = goals[i]
 		
 		if not goal.is_valid():
-			_debug_goal_state[i] = GoalState.INVALID
-			continue
-		if has_plan() and goal == current_goal:
 			if keep_debug_information:
-				if is_goal_met(current_goal, current_state):
-					_debug_goal_state[i] = GoalState.CURRENT_MET
-				else:
-					_debug_goal_state[i] = GoalState.CURRENT
-			break # The next goals are lower priority
+				_debug_goal_state[i] = GoalState.INVALID
+			continue
 		if is_goal_met(goal, current_state):
 			if keep_debug_information:
 				_debug_goal_state[i] = GoalState.MET
 			continue
 		
 		var new_plan: Array[GOAPAction] = find_plan(goal, current_state)
-		if not new_plan.is_empty():
-			if has_plan():
-				plan[current_action].__end()
-			plan = new_plan
-			current_goal = goal
-			current_action = 0
-			plan[current_action].__start()
-			plan_found.emit()
-			break
+		
+		if new_plan.is_empty():
+			_debug_goal_state[i] = GoalState.CANNOT_FIND_PLAN
+			continue
+		
+		if keep_debug_information:
+			_debug_goal_state[i] = GoalState.CURRENT
+		plan = new_plan
+		current_goal = goal
+		current_action = 0
+		plan[current_action].__start()
+		plan_found.emit()
 
 
 func find_plan(goal: GOAPGoal, current_state: Dictionary) -> Array[GOAPAction]:
