@@ -45,10 +45,13 @@ enum GoalState {
 
 const INT_INF: int = (1 << 63) - 1
 
+
 ## The world local to the agent
 @export var local_world: GOAPWorld
 ## If this is true, debug information from the plan making process will be saved
 @export var keep_debug_information: bool = false
+## The number of search steps before stopping the search for a plan
+@export var max_search_steps: int = 200
 
 var goals: Array[GOAPGoal] = []
 var actions: Array[GOAPAction] = []
@@ -89,7 +92,7 @@ func tick() -> void:
 		var action: GOAPAction = get_current_action()
 		if action.is_finished():
 			_next_action(current_state)
-		elif not action.can_execute() or not is_action_valid(action, current_state):
+		elif not is_action_valid(action, current_state):
 			# The action is not valid anymore, discard the plan
 			invalidate_current_plan()
 	
@@ -139,8 +142,14 @@ func find_plan(goal: GOAPGoal, current_state: Dictionary) -> Array[GOAPAction]:
 	var exploring_state: Dictionary
 	var found_path: bool = false
 	
+	var search_steps: int = 0
+	
 	# Find path
 	while not discovered_nodes.is_empty():
+		search_steps += 1
+		if search_steps > max_search_steps:
+			break
+		
 		exploring_state = discovered_nodes.pop()
 		
 		var goal_distance: int = goal.get_distance_to_state(exploring_state)
