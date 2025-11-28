@@ -199,6 +199,7 @@ func invalidate_current_plan() -> void:
 	if not has_plan():
 		return
 	plan[current_action].__end()
+	plan_invalidated.emit()
 	current_action = -2
 
 
