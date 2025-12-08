@@ -26,6 +26,10 @@ class_name BTCondition
 extends BTSequence
 
 
+## It true, it will fail when the condition is not met.
+## Otherwise, it suceeds
+@export var fail_on_not_met: bool = true
+
 var _condition_checked: bool
 var _condition_value: bool
 
@@ -50,4 +54,7 @@ func _internal_tick(p_child_state: InternalState) -> InternalState:
 		return super._internal_tick(p_child_state)
 	
 	reset_sequence()
-	return InternalState.FAILURE
+	if fail_on_not_met:
+		return InternalState.FAILURE
+	else:
+		return InternalState.SUCCESS
