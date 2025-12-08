@@ -32,7 +32,10 @@ var _world_states: Dictionary = {}
 
 func _ready() -> void:
 	# Get child states
-	for child: Node in get_children():
+	var to_check: Array[Node] = get_children()
+	while not to_check.is_empty():
+		var child: Node = to_check.pop_back()
+		to_check.append_array(child.get_children())
 		if child is GOAPWorldState:
 			_world_states[child.name] = child
 	
